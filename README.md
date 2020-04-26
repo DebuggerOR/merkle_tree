@@ -1,4 +1,4 @@
-# merkle_tree
+# merkle tree
 
 ## running examples
 1 a b c d
