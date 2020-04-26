@@ -79,7 +79,6 @@ class merkle_tree:
         print(*proof)
 
     def check_proof_of_inclusion(self, leaf, root, moves):
-        result = True
         prev = leaf
         direction = "l"
 
@@ -88,7 +87,7 @@ class merkle_tree:
                 direction = moves[i]
                 # according format, must be r or l
                 if moves[i] != "r" or moves[i] != "l":
-                    result = False
+                    exit()
             else:
                 if direction == "r":
                     right = moves[i]
@@ -104,9 +103,10 @@ class merkle_tree:
 
         if DEBUG:
             print("comparing %s and %s .." % (prev,root))
-        if prev != root:
-            result = False
-        print(result)
+        print(prev == root)
+
+    def hardness(self, zeroes):
+        "sdf"
 
 
 if __name__ == '__main__':
@@ -135,7 +135,8 @@ if __name__ == '__main__':
             # check proof of inclusion
             tree.check_proof_of_inclusion(args[0], args[1], args[2:])
         elif n == 4:
-            "sdff"
+            # ???
+            tree.hardness(int(args[1]))
         elif n == 5:
             # exit
             exit()
