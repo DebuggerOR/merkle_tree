@@ -22,7 +22,7 @@ True
 
 
 class merkle_tree:
-    def __init__(self, tree=[], hash_func = hashlib.sha256):
+    def __init__(self,tree=[],hash_func=hashlib.sha256):
         self.tree = tree
         self.root = None
         self.hash_func = hash_func
@@ -33,7 +33,7 @@ class merkle_tree:
             print(*self.tree[i])
         print("\n")
 
-    def __hash_tree(self, strs):
+    def __hash_tree(self,strs):
         if len(strs) == 1:
             # root
             self.root = strs[0]
@@ -41,16 +41,16 @@ class merkle_tree:
 
         next_layer = []
         # hash in couples
-        for i in range(0, len(strs), 2):
+        for i in range(0,len(strs),2):
             if DEBUG:
-                print("hashing %s and %s .." % (strs[i], strs[i+1]))
-            concat = strs[i] + strs[i+1]
+                print("hashing %s and %s .." % (strs[i],strs[i + 1]))
+            concat = strs[i] + strs[i + 1]
             next_layer.append(self.hash_func(concat.encode('utf-8')).hexdigest())
 
         self.tree = [next_layer] + self.tree
         return self.__hash_tree(next_layer)
 
-    def create_tree(self, leaves):
+    def create_tree(self,leaves):
         self.tree = [leaves]
 
         if DEBUG:
@@ -58,7 +58,7 @@ class merkle_tree:
         else:
             print(self.__hash_tree(leaves))
 
-    def __prove(self, sub_tree, node_num, proof):
+    def __prove(self,sub_tree,node_num,proof):
         last_layer = sub_tree[len(sub_tree) - 1]
 
         if len(last_layer) == 1:
@@ -74,13 +74,13 @@ class merkle_tree:
             proof.append("l")
             proof.append(last_layer[node_num - 1])
 
-        return self.__prove(sub_tree[:-1], round(node_num / 2), proof)
+        return self.__prove(sub_tree[:-1],round(node_num / 2),proof)
 
-    def create_proof_of_inclusion(self, leaf_num):
-        proof = self.__prove(self.tree, leaf_num, [])
+    def create_proof_of_inclusion(self,leaf_num):
+        proof = self.__prove(self.tree,leaf_num,[])
         print(*proof)
 
-    def check_proof_of_inclusion(self, leaf, root, moves):
+    def check_proof_of_inclusion(self,leaf,root,moves):
         h = leaf
         direction = "l"
 
@@ -107,7 +107,7 @@ class merkle_tree:
             print("comparing %s and %s .." % (h,root))
         print(h == root)
 
-    def find_start_zeroes(self, num_zeroes):
+    def find_start_zeroes(self,num_zeroes):
         zeroes = "0" * num_zeroes
 
         num = 0
@@ -116,9 +116,9 @@ class merkle_tree:
             h = str(self.hash_func(concat.encode('utf-8')).hexdigest())
             if h.startswith(zeroes):
                 if DEBUG:
-                    print("concat of %d and root is: %s" % (num, h))
+                    print("concat of %d and root is: %s" % (num,h))
                 else:
-                    print("%d %s" % (num, h))
+                    print("%d %s" % (num,h))
                 break
             num += 1
 
@@ -137,23 +137,26 @@ if __name__ == '__main__':
             print(*args)
             print("\n")
 
-        if n == 1:
-            # create tree by input leaves
-            tree.create_tree(args)
-            if DEBUG:
-                tree.display_tree()
-        elif n == 2:
-            # create proof of inclusion for input leaf index
-            tree.create_proof_of_inclusion(int(args[0]))
-        elif n == 3:
-            # check proof of inclusion
-            tree.check_proof_of_inclusion(args[0], args[1], args[2:])
-        elif n == 4:
-            # find num that hash on concat with root start with n zeroes
-            tree.find_start_zeroes(int(args[0]))
-        elif n == 5:
-            # exit
-            exit()
-        else:
-            # illegal input
+        try:
+            if n == 1:
+                # create tree by input leaves
+                tree.create_tree(args)
+                if DEBUG:
+                    tree.display_tree()
+            elif n == 2:
+                # create proof of inclusion for input leaf index
+                tree.create_proof_of_inclusion(int(args[0]))
+            elif n == 3:
+                # check proof of inclusion
+                tree.check_proof_of_inclusion(args[0],args[1],args[2:])
+            elif n == 4:
+                # find num that hash on concat with root start with n zeroes
+                tree.find_start_zeroes(int(args[0]))
+            elif n == 5:
+                # exit
+                exit()
+            else:
+                # illegal input
+                exit()
+        except:
             exit()
