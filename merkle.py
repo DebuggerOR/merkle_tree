@@ -1,4 +1,4 @@
-# ori fogler, 318732484, roi fogler, id 302882527
+# ori fogler, 318732484, roi fogler, 302882527
 
 import hashlib
 
