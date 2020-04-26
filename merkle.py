@@ -3,7 +3,7 @@
 import hashlib
 
 # DEBUG False is according submission format
-DEBUG = True
+DEBUG = False
 
 """
 running examples:
@@ -81,7 +81,7 @@ class merkle_tree:
         print(*proof)
 
     def check_proof_of_inclusion(self, leaf, root, moves):
-        prev = leaf
+        h = leaf
         direction = "l"
 
         for i in range(len(moves)):
@@ -93,36 +93,34 @@ class merkle_tree:
             else:
                 if direction == "r":
                     right = moves[i]
-                    left = prev
+                    left = h
                 else:
-                    right = prev
+                    right = h
                     left = moves[i]
 
                 if DEBUG:
                     print("hashing %s and %s .." % (left,right))
                 concat = left + right
-                prev = self.hash_func(concat.encode('utf-8')).hexdigest()
+                h = self.hash_func(concat.encode('utf-8')).hexdigest()
 
         if DEBUG:
-            print("comparing %s and %s .." % (prev,root))
-        print(prev == root)
+            print("comparing %s and %s .." % (h,root))
+        print(h == root)
 
-    def hardness(self, zeroes):
-     n=0
-     while True:
-        concat = str(n) + self.root
-        prev = self.hash_func(concat.encode('utf-8')).hexdigest()
-        i=0
-        while i <= zeroes:
-            if prev[i] != '0':
+    def find_start_zeroes(self, num_zeroes):
+        zeroes = "0" * num_zeroes
+
+        num = 0
+        while True:
+            concat = str(num) + self.root
+            h = str(self.hash_func(concat.encode('utf-8')).hexdigest())
+            if h.startswith(zeroes):
+                if DEBUG:
+                    print("concat of %d and root is: %s" % (num, h))
+                else:
+                    print("%d %s" % (num, h))
                 break
-            i+=1
-        if i == zeroes:
-            if DEBUG:
-                print(str(n) + " || " + prev + " with " + str(zeroes) + " zeros")
-            return n
-        else:
-            n+=1
+            num += 1
 
 
 if __name__ == '__main__':
@@ -151,8 +149,8 @@ if __name__ == '__main__':
             # check proof of inclusion
             tree.check_proof_of_inclusion(args[0], args[1], args[2:])
         elif n == 4:
-            # ???
-            tree.hardness(int(args[0]))
+            # find num that hash on concat with root start with n zeroes
+            tree.find_start_zeroes(int(args[0]))
         elif n == 5:
             # exit
             exit()
