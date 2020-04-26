@@ -1,14 +1,19 @@
-# merkle tree
+# **Merkle Tree**
 
-## running examples
+## Running Examples
+
+### Option 1
 1 a b c d
 12a40550c10c6339bf6f271445270e49b844d6c9e8abc36b9b642be532befe94
 
+### Option 2
 2 1
 l a r 21e721c35a5823fdb452fa2f9f0a612c74fb952e06927489c6b27a43b817bed4
 
+### Option 3
 3 b 12a40550c10c6339bf6f271445270e49b844d6c9e8abc36b9b642be532befe94 l a r 21e721c35a5823fdb452fa2f9f0a612c74fb952e06927489c6b27a43b817bed4
 True
 
+### Option 4
 4 2
 296 00038effdfc87247806ade69b932b51697490a9f9479ed43aef31657169e8703
