@@ -88,7 +88,7 @@ class merkle_tree:
             if i % 2 == 0:
                 direction = moves[i]
                 # according format, must be r or l
-                if moves[i] != "r" or moves[i] != "l":
+                if moves[i] != "r" and moves[i] != "l":
                     exit()
             else:
                 if direction == "r":
